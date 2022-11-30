@@ -1,7 +1,6 @@
 package com.example.exception.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
 import com.example.exception.dto.TestDTO;
 import com.example.exception.handle_exeption.handler.AppException;
@@ -15,7 +14,7 @@ import com.example.exception.handle_exeption.message.MessageHelper;
 import javax.validation.Valid;
 
 @RestController
-public class ProductController {
+public class DemoController {
 
     // test return result when call API
     @GetMapping("/{id}")
