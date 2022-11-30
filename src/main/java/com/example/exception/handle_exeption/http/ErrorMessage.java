@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ErrorMessage {
 
-    private String message;
+    private String text;
 
     private List<FieldErr> fieldErrs;
 

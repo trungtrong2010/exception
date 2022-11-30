@@ -11,8 +11,11 @@ import java.util.HashMap;
 public class ResponseData {
 
     private Boolean isSuccess;
-    private ErrorMessage errorMessage;
-    private HttpStatus statusCode;
+
+    private ErrorMessage message;
+
+    private HttpStatus httpStatus;
+
     private HashMap<String, Object> data;
 
     public ResponseData() {

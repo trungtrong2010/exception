@@ -10,7 +10,7 @@ import java.util.List;
 public class ApiResult {
 
     public static ResponseEntity<ResponseData> success() {
-        return response(HttpStatus.OK, MessageHelper.getMessage(Message.Keys.I0001), new ResponseData(), null);
+        return response(HttpStatus.OK, MessageHelper.getMessage(Message.Keys.I0001), null, null);
     }
 
     public static ResponseEntity<ResponseData> success(ResponseData data) {
@@ -22,47 +22,47 @@ public class ApiResult {
     }
 
     public static ResponseEntity<ResponseData> failed() {
-        return response(HttpStatus.BAD_REQUEST, MessageHelper.getMessage(Message.Keys.I0002), new ResponseData(), null);
+        return response(HttpStatus.BAD_REQUEST, MessageHelper.getMessage(Message.Keys.I0002), null, null);
     }
 
     public static ResponseEntity<ResponseData> failed(Message message) {
-        return response(HttpStatus.BAD_REQUEST, message, new ResponseData(), null);
+        return response(HttpStatus.BAD_REQUEST, message, null, null);
     }
 
-
-    public static ResponseEntity<ResponseData> failed(Message message, List<FieldErr> fieldErrs) {
-        return response(HttpStatus.BAD_REQUEST, message, new ResponseData(), fieldErrs);
+    public static ResponseEntity<ResponseData> failed(HttpStatus httpStatus, Message message) {
+        return response(httpStatus, message, null, null);
     }
 
-    public static ResponseEntity<ResponseData> failed(List<FieldErr> fieldErrs) {
-        return response(HttpStatus.BAD_REQUEST, null, new ResponseData(), fieldErrs);
+    public static ResponseEntity<ResponseData> failed(HttpStatus httpStatus, Message message, List<FieldErr> fieldErrs) {
+        return response(httpStatus, message, null, fieldErrs);
     }
 
-    public static ResponseEntity<ResponseData> response(
-            HttpStatus httpStatus,
-            Message message,
-            ResponseData data,
-            List<FieldErr> fieldErrs
-    ) {
+    public static ResponseEntity<ResponseData> response(HttpStatus httpStatus, Message message, ResponseData data, List<FieldErr> fieldErrs) {
+
+        ResponseData responseData = new ResponseData();
+
         if (data == null) {
-            data = new ResponseData();
-        }
-        if (httpStatus.equals(HttpStatus.OK) || httpStatus.equals(HttpStatus.CREATED)) {
-            data.setStatusCode(httpStatus);
-            data.setIsSuccess(true);
+            responseData.setData(null);
         } else {
-            data.setIsSuccess(false);
-            ErrorMessage errorMessage = new ErrorMessage();
-
-            errorMessage.setMessage(message.getContent());
-
-            errorMessage.setFieldErrs(fieldErrs);
-
-            data.setStatusCode(httpStatus);
-            data.setErrorMessage(errorMessage);
-            data.setData(null);
+            responseData.setData(data.getData());
         }
-        return ResponseEntity.status(httpStatus).body(data);
+
+        ErrorMessage errorMessage = new ErrorMessage();
+        if (httpStatus.equals(HttpStatus.OK) || httpStatus.equals(HttpStatus.CREATED)) {
+            responseData.setIsSuccess(true);
+            errorMessage.setFieldErrs(null);
+
+        } else {
+            responseData.setIsSuccess(false);
+            errorMessage.setFieldErrs(fieldErrs);
+        }
+
+        errorMessage.setText(message.getContent());
+        responseData.setMessage(errorMessage);
+
+        responseData.setHttpStatus(httpStatus);
+
+        return ResponseEntity.status(httpStatus).body(responseData);
     }
 
 }

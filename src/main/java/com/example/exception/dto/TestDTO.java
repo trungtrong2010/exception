@@ -19,6 +19,4 @@ public class TestDTO {
     @NotBlank(message = "Email is mandatory")
     private String email;
 
-
-
 }
