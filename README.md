@@ -1,1 +1,1 @@
-"# exception" 
+Handle exception and return ResponseData result.
